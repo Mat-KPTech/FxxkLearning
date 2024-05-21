@@ -40,20 +40,22 @@ Java 基本数据类型的包装类型的大部分都用到了缓存机制来提
 `Integer` 缓存源码：
 
 ```java
-public static Integer valueOf(int i) {
+public class test {
+  public static Integer valueOf(int i) {
     // 判断传入的整型是否在这个区间
     if (i >= IntegerCache.low && i <= IntegerCache.high)
-        return IntegerCache.cache[i + (-IntegerCache.low)];
+      return IntegerCache.cache[i + (-IntegerCache.low)];
     return new Integer(i);
-}
+  }
 
-private static class IntegerCache {
+  private static class IntegerCache {
     static final int low = -128;
     static final int high;
     static {
-        // high value may be configured by property
-        int h = 127;
+      // high value may be configured by property
+      int h = 127;
     }
+  }
 }
 ```
 
