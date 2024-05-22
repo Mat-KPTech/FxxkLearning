@@ -240,4 +240,46 @@ public class TestThreadPool {
 
 ```
 
+**问题思考**
 
++ 局部变量定义的线程池对象在方法结束后可以被垃圾回收吗？
+
+```java
+import java.util.concurrent.ExecutorCompletionService;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
+public static void main(String[] args) {
+    test1();
+    test2();
+}
+
+public static void test1() {
+
+    Object object = new Object();
+    System.out.println("方法一执行完毕");
+}
+
+public static void test2() {
+
+    ExecutorService executorService = Executors.newFixedThreadPool();
+    executorService.execute(new Runnable() {
+        @Override
+        public void run() {
+            System.out.println("方法二执行完成");
+        }
+    });
+}
+
+```
+
+**问题分析与解答**
+
+> obj是定义在test1()方法体内的局部变量，正常来说局部变量会保存在栈中，随着方法的结束，栈帧出栈，栈帧中的局部变量也会销毁，此时没有任何变量指向堆内存中的`new object()`对象，
+> 所以堆中的 `new Object()`对象可以被垃圾回收；`executorService`同样也是定义在方法中的局部变量，但在方法结束后，线程池中还存在活跃的线程，
+> 根据GC Roots可达性分析远离，可作为GC Roots的对象有：
+> 
+> + 虚拟机栈（栈帧中的本地变量表）中引用的关系；
+> + 方法区中的类静态属性引用的对象
+> + 本地方法栈中JNI(即一般说的Native方法)引用的对象
+> + 正在运行的线程
