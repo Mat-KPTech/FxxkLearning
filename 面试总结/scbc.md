@@ -128,3 +128,34 @@
     t limits the amount of data that a GET request can carry, making it unsuitable for scenarios that require transmitting a large amount of data
     It is not conducive to handling complex business logic and data interaction, increasing the difficulty of development and maintenance.
     Have some cache issue, need to reflash the cache.
+
+## 执行计划要怎么看？
+
+    1. 通过关键词 explain + sql语句可以实现查看执行计划
+    
+    just use explain + sql
+
+    2. 执行的时候可以看到一些内容
+
+    id 每个select子句的标识
+    select_type 表示查询的类型
+    table 表示查询的表
+    type 表示连接类型
+    possible_keys 表示可能用到的索引
+    key 表示实际用到的索引
+    key_len 表示索引的长度
+    ref 表示连接的列
+    rows 表示扫描的行数
+    Extra 表示一些额外的信息
+
+    ID It is the query sequence number, which is the unique identifier for each SELECT clause in the query. id is same ，it will Execute sequentially
+    SELECT_TYPE It indicates the type of query.
+    TABLE It represents the table queried.
+    TYPE It represents the connection type.
+    POSSIBLE_KEYS It represents the possible indexes used.
+    KEY It represents the actual index used.
+    KEY_LEN It represents the length of the index.
+    REF It represents the connected column.
+    ROWS It represents the number of rows scanned.
+    Extra It represents some additional information.
+
